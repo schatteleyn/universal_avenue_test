@@ -1,0 +1,11 @@
+<p id="notice"><%= notice %></p>
+
+<% @posts.each do |post| %>
+  <div class="post">
+    <div class="title"><%= post.title %></div>
+    <div class="content"><%= post.content %></div>
+  </div>
+<% end %>
+
+<%= link_to 'Edit', edit_blog_path(@blog) %> |
+<%= link_to 'Back', blogs_path %>
