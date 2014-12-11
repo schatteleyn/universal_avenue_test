@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141209201905) do
+ActiveRecord::Schema.define(version: 20141210133505) do
 
   create_table "blogs", force: true do |t|
     t.string   "name"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 20141209201905) do
 
   add_index "blogs", ["email"], name: "index_blogs_on_email", unique: true
   add_index "blogs", ["reset_password_token"], name: "index_blogs_on_reset_password_token", unique: true
+
+  create_table "comments", force: true do |t|
+    t.integer  "post_id"
+    t.integer  "blog_id"
+    t.string   "username"
+    t.string   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "posts", force: true do |t|
     t.string   "title"

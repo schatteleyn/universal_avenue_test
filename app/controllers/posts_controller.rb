@@ -1,21 +1,25 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :destroy]
+  before_action :set_blog, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_blog!, except: [:show]
 
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Blog.find(params[:blog_id]).posts.page(params[:page]).per(10)
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @comment = Comment.new
+    @comments = @post.comments.page(params[:page]).per(20)
+    @blog = @post.blog
   end
 
   # GET /posts/new
   def new
     @post = Post.new
-    @blog = current_blog
   end
 
   # GET /posts/1/edit
@@ -29,7 +33,7 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to show_blog_posts_path(current_blog, @post), notice: 'Post was successfully created.' }
+        format.html { redirect_to show_blog_posts_path(@blog, @post), notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
@@ -41,9 +45,10 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+    @post = Post.find(post_params[:post_id])
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+        format.html { redirect_to show_blog_posts_path(@blog, @post), notice: 'Post was successfully updated.' }
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
@@ -57,7 +62,7 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     respond_to do |format|
-      format.html { redirect_to blog_posts_index_path(current_blog), notice: 'Post was successfully destroyed.' }
+      format.html { redirect_to blog_posts_index_path(@blog), notice: 'Post was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -67,9 +72,13 @@ class PostsController < ApplicationController
     def set_post
       @post = Post.find(params[:post_id])
     end
+    
+    def set_blog
+      @blog = current_blog
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:blog_id, :title, :content)
+      params.require(:post).permit(:blog_id, :post_id, :title, :content)
     end
 end

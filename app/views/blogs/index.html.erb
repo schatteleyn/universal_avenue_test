@@ -1,4 +1,4 @@
-<h1>Listing blogs</h1>
+<h2>Explore the blogs</h2>
 
 <table>
   <thead>
@@ -8,11 +8,16 @@
   </thead>
 
   <tbody>
+    <%= paginate @blogs %>
     <% @blogs.each do |blog| %>
       <tr>
-        <td><%= link_to 'Show', blog %></td>
-        <td><%= link_to 'Edit', edit_blog_path(blog) %></td>
-        <td><%= link_to 'Destroy', blog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><h3><%= link_to blog.name, blog %></h3></td>
+        <%  if blog_signed_in? 
+	      if blog.email == current_blog.email %>
+        <td><%= link_to 'Edit', edit_blog_path(blog), class: "btn btn-default" %></td>
+        <td><%= link_to 'Destroy', blog, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+        <%    end 
+	    end%>
       </tr>
     <% end %>
   </tbody>
@@ -20,4 +25,4 @@
 
 <br>
 
-<%= link_to 'New Blog', new_blog_path %>
+<%= link_to 'Create a blog', new_blog_path %>

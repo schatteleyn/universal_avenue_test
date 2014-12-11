@@ -1,11 +1,11 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_blog!, except: ['create']
+  before_action :authenticate_blog!, except: [:index, :create, :show]
 
   # GET /blogs
   # GET /blogs.json
   def index
-    @blogs = Blog.all
+    @blogs = Blog.all.page(params[:page])
   end
 
   # GET /blogs/1

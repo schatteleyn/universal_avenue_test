@@ -2,6 +2,31 @@
   <div class="container">
     <h2><%= @post.title %></h2>
     <p><%= @post.content %></p>
+
+    <% if current_blog == @post.blog %>
+          <p><%= link_to 'Edit', edit_blog_posts_path(@post) %></p>
+    <% end %> 
+    <br />
+    <button type="button" class="btn btn-primary btn-lg launch_modal">
+      Comment this article
+    </button>
+    <br />
+    <br />
+    <%= render 'comments/index' %>
   </div>
-<%= link_to 'Edit', edit_blog_posts_path(@post) %> |
-<%= link_to 'Back', blog_posts_path %>
+<%= link_to 'Back', blog_path(@blog) %>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create comment</h4>
+      </div>
+      <div class="modal-body">
+	<%= render 'comments/form' %>
+      </div>
+    </div>
+  </div>
+</div>
+

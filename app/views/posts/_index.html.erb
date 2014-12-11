@@ -1,0 +1,12 @@
+<%# paginate @posts %>
+<% @posts.each do |post| %>
+  <div class="post">
+    <h3 class="title"><%= link_to post.title, show_blog_posts_path(@blog.id, post.id) %></h3>
+    <div class="content"><%= post.content %></div>
+    <%= if current_blog == @blog
+	  link_to 'Edit article', edit_blog_posts_path(@blog.id, post_id: post.id)  
+	end %>
+    <br />
+    <%= post.comments.count %> comments.
+  </div>
+<% end %>

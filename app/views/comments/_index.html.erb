@@ -1,0 +1,15 @@
+Comments:
+<%= paginate @comments %>
+<div>  
+  <% @comments.reverse.each do |comment| %>
+    <p>
+      <b><%= comment.username %></b>: <small><%= l(comment.created_at, format: :format) %></small><br />
+      <%= comment.content %>
+      <%= if current_blog == @blog
+	    link_to 'Delete this comment', destroy_blog_posts_comments_path(@blog.id, @post.id, id: comment.id), method: :delete
+	  end %>
+      </p>
+  <% end %>
+  <br />
+</div>
+<%= paginate @comments %>
